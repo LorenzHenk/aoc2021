@@ -3,22 +3,45 @@ import { parsePartOne, SubmarineCommandType } from "./parse";
 export const solvePartOne = (input: string) => {
   const parsedInput = parsePartOne(input);
 
-  const { horizontal, vertical } = parsedInput.reduce(
+  const { horizontal, depth } = parsedInput.reduce(
     (acc, next) => {
       if (next.type === SubmarineCommandType.Forward) {
         return { ...acc, horizontal: acc.horizontal + next.amount };
       } else if (next.type === SubmarineCommandType.Up) {
-        return { ...acc, vertical: acc.vertical - next.amount };
+        return { ...acc, depth: acc.depth - next.amount };
       } else if (next.type === SubmarineCommandType.Down) {
-        return { ...acc, vertical: acc.vertical + next.amount };
+        return { ...acc, depth: acc.depth + next.amount };
       }
 
       throw Error(`Unsupported type ${next.type}`);
     },
-    { horizontal: 0, vertical: 0 },
+    { horizontal: 0, depth: 0 },
   );
 
-  return horizontal * vertical;
+  return horizontal * depth;
 };
 
-export const solvePartTwo = (input: string) => {};
+export const solvePartTwo = (input: string) => {
+  const parsedInput = parsePartOne(input);
+
+  const { horizontal, depth } = parsedInput.reduce(
+    (acc, next) => {
+      if (next.type === SubmarineCommandType.Forward) {
+        return {
+          ...acc,
+          horizontal: acc.horizontal + next.amount,
+          depth: acc.depth + next.amount * acc.aim,
+        };
+      } else if (next.type === SubmarineCommandType.Up) {
+        return { ...acc, aim: acc.aim - next.amount };
+      } else if (next.type === SubmarineCommandType.Down) {
+        return { ...acc, aim: acc.aim + next.amount };
+      }
+
+      throw Error(`Unsupported type ${next.type}`);
+    },
+    { horizontal: 0, depth: 0, aim: 0 },
+  );
+
+  return horizontal * depth;
+};
