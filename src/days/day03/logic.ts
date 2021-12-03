@@ -1,6 +1,13 @@
 import * as R from "ramda";
 import { Bit, DiagnosticReport } from "./parse";
 
+export const binaryToDecimal = (data: Bit[]): number => {
+  return data.reduce(
+    (acc, next, index) => acc + Math.pow(2, data.length - index - 1) * next,
+    0 as number,
+  );
+};
+
 /**
  * count 0 and 1 occurrences per position
  */
@@ -16,25 +23,44 @@ export const getBitCountGroup = (diagnosticReport: DiagnosticReport) => {
   });
 };
 
-export const getGammaBinary = (diagnosticReport: DiagnosticReport) => {
+const getXBinary = (
+  groupingFunction: (count0: number, count1: number) => Bit,
+) => (diagnosticReport: DiagnosticReport) => {
   const groups = getBitCountGroup(diagnosticReport);
 
-  return groups.map((group) => {
-    return group[0] > group[1] ? 0 : 1;
-  });
+  return groups.map((group) => groupingFunction(group[0], group[1]));
 };
 
-export const getEpsilonBinary = (diagnosticReport: DiagnosticReport) => {
-  const groups = getBitCountGroup(diagnosticReport);
+export const getGammaBinary = getXBinary((count0, count1) =>
+  count0 > count1 ? 0 : 1,
+);
 
-  return groups.map((group) => {
-    return group[0] > group[1] ? 1 : 0;
-  });
+export const getEpsilonBinary = getXBinary((count0, count1) =>
+  count0 > count1 ? 1 : 0,
+);
+
+export const getOxygenGeneratorRating = (
+  diagnosticReport: DiagnosticReport,
+) => {
+  let data = [...diagnosticReport.data];
+  let index = 0;
+  while (data.length > 1) {
+    const bitCountAtIndex = getBitCount(data.map((row) => row[index]));
+    const mostCommon = bitCountAtIndex[0] > bitCountAtIndex[1] ? 0 : 1;
+    data = data.filter((row) => row[index] === mostCommon);
+    index++;
+  }
+  return data[0];
 };
 
-export const binaryToDecimal = (data: Bit[]): number => {
-  return data.reduce(
-    (acc, next, index) => acc + Math.pow(2, data.length - index - 1) * next,
-    0 as number,
-  );
+export const getCO2ScrubberRating = (diagnosticReport: DiagnosticReport) => {
+  let data = [...diagnosticReport.data];
+  let index = 0;
+  while (data.length > 1) {
+    const bitCountAtIndex = getBitCount(data.map((row) => row[index]));
+    const mostCommon = bitCountAtIndex[0] > bitCountAtIndex[1] ? 1 : 0;
+    data = data.filter((row) => row[index] === mostCommon);
+    index++;
+  }
+  return data[0];
 };
