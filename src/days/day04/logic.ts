@@ -28,6 +28,49 @@ export const playGameUntilWon = (game: BingoGame) => {
   };
 };
 
+export const playGameUntilAllWon = (game: BingoGame) => {
+  // horizontal and vertical lines that need to be checked
+  const boardLinesToCheck: ColumnsAndRows[] = game.boards.map(
+    getBoardLinesToCheck,
+  );
+
+  let numbersToDraw = game.numbersToDraw;
+
+  let drawnNumberIndex = 0;
+
+  let winningIndices: number[] = [];
+
+  while (winningIndices.length !== game.boards.length) {
+    drawnNumberIndex++;
+
+    let winningBoardIndex;
+    // remove all winning boards
+    do {
+      // do not check boards that already won
+      const boardsToCheck = boardLinesToCheck.filter(
+        (_, i) => !winningIndices.includes(i),
+      );
+
+      winningBoardIndex = getWinningBoardIndex(
+        numbersToDraw.slice(0, drawnNumberIndex),
+        boardsToCheck,
+      );
+
+      if (winningBoardIndex !== null) {
+        winningIndices.push(
+          // get the correct board index
+          boardLinesToCheck.indexOf(boardsToCheck[winningBoardIndex]),
+        );
+      }
+    } while (winningBoardIndex !== null);
+  }
+
+  return {
+    boardsInWinningOrder: winningIndices.map((i) => game.boards[i]),
+    drawnNumbers: numbersToDraw.slice(0, drawnNumberIndex),
+  };
+};
+
 export const getBoardLinesToCheck = (board: BingoBoard): ColumnsAndRows => {
   return board.rows.concat(
     range(0, 5).map((i) => board.rows.map((row) => row[i])),
