@@ -1,7 +1,9 @@
 import { parsePartOne } from "./parse";
 
-export const solvePartOne = (input: string) => {
-  const parsedInput = parsePartOne(input);
+export const solvePartOne = (rawInput: string) => {
+  const input = parsePartOne(rawInput);
 };
 
-export const solvePartTwo = (input: string) => {};
+export const solvePartTwo = (rawInput: string) => {
+  const input = parsePartOne(rawInput);
+};
