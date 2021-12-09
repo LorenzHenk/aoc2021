@@ -1,5 +1,7 @@
-import { sum } from "ramda";
-import { findLowPoints } from "./logic";
+import { pipe } from "fp-ts/lib/function";
+import { multiply, reduce, sort, sum, take } from "ramda";
+
+import { findBasins, findLowPoints } from "./logic";
 import { parsePartOne } from "./parse";
 
 export const solvePartOne = (rawInput: string) => {
@@ -12,4 +14,13 @@ export const solvePartOne = (rawInput: string) => {
 
 export const solvePartTwo = (rawInput: string) => {
   const input = parsePartOne(rawInput);
+
+  const basins = findBasins(input);
+
+  return pipe(
+    Object.values(basins).map((v) => v.length),
+    sort((a, b) => b - a),
+    take(3),
+    reduce<number, number>(multiply, 1),
+  );
 };

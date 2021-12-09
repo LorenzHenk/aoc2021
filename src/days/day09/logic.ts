@@ -1,4 +1,4 @@
-import { uniqBy } from "ramda";
+import { groupBy } from "ramda";
 import { HeightMap } from "./parse";
 
 interface NumberWithCoordinates {
@@ -66,4 +66,17 @@ export const findLowPoints = (heightMap: HeightMap) => {
   );
 
   return res;
+};
+
+export const findBasins = (heightMap: HeightMap) => {
+  const res = heightMap.rows
+    .flatMap((line, y) =>
+      line.map((_n, x) =>
+        _n === 9 ? undefined : findLowestNumber(heightMap)(x, y),
+      ),
+    )
+    .filter((n): n is NumberWithCoordinates => n !== undefined);
+
+  const uniqueNumbers = groupBy(({ x, y }) => x + " " + y, res);
+  return uniqueNumbers;
 };
