@@ -28,8 +28,18 @@ test("isOpen", () => {
 
 test("validateLine", () => {
   const data = parsePartOne(INPUT);
-  expect(validateLine(data[0])).toEqual(either.left({ type: "Incomplete" }));
-  expect(validateLine(data[1])).toEqual(either.left({ type: "Incomplete" }));
+  expect(validateLine(data[0])).toEqual(
+    either.left({
+      type: "Incomplete",
+      unclosed: ["[", "(", "{", "(", "[", "[", "{", "{"],
+    }),
+  );
+  expect(validateLine(data[1])).toEqual(
+    either.left({
+      type: "Incomplete",
+      unclosed: ["(", "{", "[", "<", "{", "("],
+    }),
+  );
   expect(validateLine(data[2])).toEqual(
     either.left({
       type: "Corrupted",
@@ -37,7 +47,12 @@ test("validateLine", () => {
       received: "}",
     }),
   );
-  expect(validateLine(data[3])).toEqual(either.left({ type: "Incomplete" }));
+  expect(validateLine(data[3])).toEqual(
+    either.left({
+      type: "Incomplete",
+      unclosed: ["(", "(", "(", "(", "<", "{", "<", "{", "{"],
+    }),
+  );
   expect(validateLine(data[4])).toEqual(
     either.left({
       type: "Corrupted",
@@ -52,7 +67,12 @@ test("validateLine", () => {
       received: "]",
     }),
   );
-  expect(validateLine(data[6])).toEqual(either.left({ type: "Incomplete" }));
+  expect(validateLine(data[6])).toEqual(
+    either.left({
+      type: "Incomplete",
+      unclosed: ["<", "{", "[", "{", "[", "{", "{", "[", "["],
+    }),
+  );
   expect(validateLine(data[7])).toEqual(
     either.left({
       type: "Corrupted",
@@ -67,5 +87,7 @@ test("validateLine", () => {
       received: ">",
     }),
   );
-  expect(validateLine(data[9])).toEqual(either.left({ type: "Incomplete" }));
+  expect(validateLine(data[9])).toEqual(
+    either.left({ type: "Incomplete", unclosed: ["<", "{", "(", "["] }),
+  );
 });

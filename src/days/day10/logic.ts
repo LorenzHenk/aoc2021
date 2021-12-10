@@ -17,6 +17,7 @@ export interface CorruptedValidationError {
 
 export interface IncompleteValidationError {
   type: "Incomplete";
+  unclosed: string[];
 }
 
 export type ValidationError =
@@ -28,6 +29,9 @@ export const isMatch = (a: string, b: string) =>
 
 export const isOpen = (character: string) =>
   PAIRS.some(([open]) => character === open);
+
+export const getClosing = (character: string) =>
+  PAIRS.find(([open]) => open === character)![1];
 
 export const validateLine = (
   line: string[],
@@ -54,7 +58,16 @@ export const validateLine = (
     either.chain((bracketsLeft) =>
       bracketsLeft.length === 0
         ? either.right([])
-        : either.left({ type: "Incomplete" } as ValidationError),
+        : either.left({
+            type: "Incomplete",
+            unclosed: bracketsLeft,
+          } as ValidationError),
     ),
   );
 };
+
+export const mapBracketToCompletionScore = (b: string): number =>
+  ({ ")": 1, "]": 2, "}": 3, ">": 4 }[b]!);
+
+export const calculateCompletionScore = (data: string[]) =>
+  data.reduce((acc, next) => acc * 5 + mapBracketToCompletionScore(next), 0);
