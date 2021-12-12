@@ -2,6 +2,17 @@
 
 This is my take on the [Advent of Code 2021](https://adventofcode.com/2021), written in NodeJS.
 
+## Configuration
+
+Start by creating a `.env` based on the `.env.example`:
+
+```
+cp .env.example .env
+```
+
+Replace the `YEAR` with the year you want to work on.
+Replace the `SESSION` with the session cookie content.
+
 ## Usage
 
 ### Initialize a new day
@@ -26,6 +37,12 @@ Run the tests:
 
 ```bash
 yarn test
+```
+
+Run tests for specific day in watch mode:
+
+```bash
+yarn test --testPathPattern "day01" --watch
 ```
 
 ## Meta
