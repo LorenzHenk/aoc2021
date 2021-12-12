@@ -1,6 +1,6 @@
 import { trim } from "fp-ts/lib/string";
 
-interface Cave {
+export interface Cave {
   name: string;
   isLarge: boolean;
   connectedTo: string[];

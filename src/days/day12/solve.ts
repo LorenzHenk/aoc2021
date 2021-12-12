@@ -1,4 +1,4 @@
-import { findPaths } from "./logic";
+import { findPaths, findPathsWithGoingBackOnce } from "./logic";
 import { parsePartOne } from "./parse";
 
 export const solvePartOne = (rawInput: string) => {
@@ -8,4 +8,5 @@ export const solvePartOne = (rawInput: string) => {
 
 export const solvePartTwo = (rawInput: string) => {
   const input = parsePartOne(rawInput);
+  return findPathsWithGoingBackOnce(input).length;
 };
