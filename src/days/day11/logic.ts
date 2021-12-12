@@ -73,7 +73,7 @@ export const flash = (
     }
   }
 
-  return { octopusMap: data as OctopusMap, flashes: flashes.length };
+  return { octopusMap: data, flashes: flashes.length };
 };
 
 export const runStep = (octopusMap: OctopusMap) => {

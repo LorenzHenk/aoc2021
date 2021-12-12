@@ -19,4 +19,15 @@ export const solvePartOne = (rawInput: string) => {
 
 export const solvePartTwo = (rawInput: string) => {
   const input = parsePartOne(rawInput);
+
+  let step = 0;
+  let octopusMap = input;
+
+  while (!octopusMap.every((row) => row.every((o) => o === 0))) {
+    step++;
+    const result = runStep(octopusMap);
+    octopusMap = result.octopusMap;
+  }
+
+  return step;
 };
