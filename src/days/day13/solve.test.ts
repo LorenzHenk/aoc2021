@@ -13,7 +13,7 @@ describe("Solve part one", () => {
 
 describe("Solve part two", () => {
   it("Solves the README example correctly", () => {
-    const EXPECTED_RESULT = undefined;
+    const EXPECTED_RESULT = "0";
 
     const result = solvePartTwo(SAMPLE_INPUT);
 
